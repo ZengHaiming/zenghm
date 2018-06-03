@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.SocketOptions;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,7 +15,7 @@ import java.util.concurrent.Executors;
  */
 public class M1SocketClientTest {
     private Logger logger = LoggerFactory.getLogger(M1SocketClient.class);
-    CountDownLatch downLatch = new CountDownLatch(20000);
+    private CountDownLatch downLatch = new CountDownLatch(20000);
     @org.junit.Test
     public void clientTest() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(10);

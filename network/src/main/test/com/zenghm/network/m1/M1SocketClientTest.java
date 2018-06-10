@@ -15,11 +15,11 @@ import java.util.concurrent.Executors;
  */
 public class M1SocketClientTest {
     private Logger logger = LoggerFactory.getLogger(M1SocketClient.class);
-    private CountDownLatch downLatch = new CountDownLatch(20000);
+    private CountDownLatch downLatch = new CountDownLatch(12000);
     @org.junit.Test
     public void clientTest() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        int i =0,count=20000;
+        int i =0,count=12000;
         long begin = System.currentTimeMillis();
         do{
             i++;

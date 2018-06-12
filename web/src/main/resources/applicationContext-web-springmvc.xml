@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <mvc:annotation-driven/>
+    <!-- 注解支持 -->
+    <context:annotation-config/>
+
+    <!-- 这个不知道是干啥的 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+
+    <context:component-scan base-package="com.zenghm.web.controller.*" >
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+
+    <!-- 方式一 静态资源设置，否则无法访问静态资源-->
+    <mvc:resources location="/uikit-2.25.0/js/" mapping="/uikit-2.25.0/js/**"/>
+    <mvc:resources location="/uikit-2.25.0/css/" mapping="/uikit-2.25.0/css/**"/>
+    <mvc:resources location="/biz/" mapping="/biz/**"/>
+    <mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
+
+    <!-- 方式二 没有找serlet 则默认的-->
+    <!--<mvc:default-servlet-handler/>-->
+
+</beans>

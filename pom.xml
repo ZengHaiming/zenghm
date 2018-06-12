@@ -7,12 +7,13 @@
     <groupId>com.zenghm</groupId>
     <artifactId>zenghm</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>${zenghm.version}</version>
     <modules>
         <module>network</module>
         <module>common</module>
         <module>zui</module>
         <module>web</module>
+        <module>web-dto</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +27,8 @@
         <com.google.guava.version>20.0</com.google.guava.version>
         <arquillian-junit-container.version>1.4.0.Final</arquillian-junit-container.version>
         <javax.servlet.jsp-api.version>2.1</javax.servlet.jsp-api.version>
+        <javax.servlet.api.version>2.5</javax.servlet.api.version>
+        <org.springframework.spring.version>4.1.5.RELEASE</org.springframework.spring.version>
     </properties>
     <dependencyManagement>
         <dependencies>

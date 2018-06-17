@@ -10,6 +10,7 @@ import com.zenghm.web.controller.ControllerConstant;
  * Create date:2018/06/12.
  * Created by: Airlen.
  * Class name:SessionFilter.
+ * 注意：不能拦截了静态资源，否则静态资源无法加载
  */
 public class SessionFilter implements Filter {
 
@@ -28,7 +29,7 @@ public class SessionFilter implements Filter {
                 (request.getSession()==null ||
                         request.getSession().getAttribute(ControllerConstant.AUTHENTICATED_USER)==null)){
             //跳转欢迎页面
-            response.sendRedirect(request.getContextPath() +"/");
+            response.sendRedirect(request.getContextPath() +"/login.jsp");
         }else {
             filterChain.doFilter(servletRequest,servletResponse);
         }
@@ -40,7 +41,7 @@ public class SessionFilter implements Filter {
     }
 
     private boolean isLoginReq(String path){
-        String [] loginReqAdd = new String[]{"/user/login.do","/index.jsp"};
+        String [] loginReqAdd = new String[]{"/user/login.do","/login.jsp","/"};
         for (String str:loginReqAdd){
             if (str.equals(path)) return true;
         }

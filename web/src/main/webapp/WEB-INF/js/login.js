@@ -3,31 +3,25 @@
  * 首页处理js
  */
 (function (window,$) {
-    window.index = {
+    window.loginPage = {
         login:function () {
-            /*
-             $.post()
-             {
-             type: method,
-             url: url,
-             data: data,
-             success: callback,
-             dataType: type
-             }
-            * */
             $.ajax({
                 type:'POST',
                 url:getWeb_Root()+'/user/login.do',
                 dataType:'json',
                 data:{
-                    user:'123456',
+                    user:'ShowCode',
                     password:'123456'
                 },
                 success:function (result) {
-                    alert('登录成功！');
+                    if (result!=undefined&&result!=null&&result!=''&&result=='1'){
+                        window.location.href = getWeb_Root()+'/index/indexFrame.do';
+                    }else {
+                        alert(result);
+                    }
                 },
                 error:function (result) {
-                    alert('登录失败！');
+                    alert('登录失败！'+result);
                 }
             });
         }

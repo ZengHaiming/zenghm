@@ -8,5 +8,6 @@
 <%@page pageEncoding="UTF-8" language="java" isELIgnored="false" %>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/uikit-2.25.0/css/uikit.min.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/uikit-2.25.0/css/uikit.almost-flat.min.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/uikit-2.25.0/css/common/zhm-common.css" />
 <%--<link rel="stylesheet" type="text/css" href="<%=web_Root%>/uikit-2.25.0/css/uikit.min.css" />--%>
 <%--<link rel="stylesheet" type="text/css" href="<%=web_Root%>/uikit-2.25.0/css/uikit.almost-flat.min.css" />--%>

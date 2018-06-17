@@ -20,12 +20,19 @@
     </context:component-scan>
 
     <!-- 方式一 静态资源设置，否则无法访问静态资源-->
-    <mvc:resources location="/uikit-2.25.0/js/" mapping="/uikit-2.25.0/js/**"/>
-    <mvc:resources location="/uikit-2.25.0/css/" mapping="/uikit-2.25.0/css/**"/>
-    <mvc:resources location="/biz/" mapping="/biz/**"/>
+    <!--<mvc:resources location="/uikit-2.25.0/js/" mapping="/uikit-2.25.0/js/**"/>-->
+    <!--<mvc:resources location="/uikit-2.25.0/css/" mapping="/uikit-2.25.0/css/**"/>-->
+    <!--<mvc:resources location="/biz/" mapping="/biz/**"/>-->
+    <!-- 如下行不定义，在WEN-INF下的资源将访问不到 -->
     <mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
+    <mvc:resources location="/WEB-INF/jsp/" mapping="/jsp/**"/>
 
-    <!-- 方式二 没有找serlet 则默认的-->
-    <!--<mvc:default-servlet-handler/>-->
+    <!-- 方式二 没有找servlet 则默认的-->
+    <mvc:default-servlet-handler/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
 </beans>

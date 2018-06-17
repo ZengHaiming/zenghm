@@ -21,9 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
     @RequestMapping(value = "/login.do", method = RequestMethod.POST)
     @ResponseBody
-    String login(HttpSession session, @RequestParam("user") String userid,
+    public String login(HttpSession session, @RequestParam("user") String userid,
                  @RequestParam("password") String password){
-
         SysUser user = new SysUser();
         user.setUserid(userid);
         user.setUsername(userid);
@@ -31,6 +30,13 @@ public class UserController {
         /**
          * 返回字符时 ，会默认返回的是视图，导致请求失败，需要添加注解，表示返回的在响应体中
          */
+        return ResultUtil.SUCCESS;
+    }
+
+    @RequestMapping(value = "/logout.do", method = RequestMethod.POST)
+    @ResponseBody
+    public String logout(HttpSession session){
+        session.removeAttribute(ControllerConstant.AUTHENTICATED_USER);
         return ResultUtil.SUCCESS;
     }
 }

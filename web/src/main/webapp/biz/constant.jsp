@@ -9,7 +9,7 @@
 <%
     String web_Root = request.getContextPath();
 %>
-<script type="text/javascript">
+<script type="text/javascript" language="JavaScript">
     (function (window) {
         window.getWeb_Root=function () {
             return '<%=web_Root%>';

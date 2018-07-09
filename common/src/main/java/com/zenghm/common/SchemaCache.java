@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * Create date:2018/04/21.
  * Created by: Airlen.
  * Class name:SchemaCache.
+ * @author Airlen
  */
 public class SchemaCache {
     private Logger logger = LoggerFactory.getLogger(SchemaCache.class);
@@ -34,6 +35,7 @@ public class SchemaCache {
     private Schema<?> get(final Class<?> clazz,Cache<Class<?>,Schema<?>> cache){
         try {
             return cache.get(clazz, new Callable<Schema<?>>() {
+                @Override
                 public Schema<?> call() throws Exception {
                     return RuntimeSchema.createFrom(clazz);
                 }

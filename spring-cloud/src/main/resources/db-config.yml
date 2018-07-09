@@ -1,0 +1,5 @@
+spring:
+  profiles:mysql
+  jdbc:
+    driver:
+      com.mysql.jdbc.Driver

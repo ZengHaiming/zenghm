@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Create date:2018/06/12.
  * Created by: Airlen.
  * Class name:user.
+ * @author Airlen
  */
 @Controller
 @RequestMapping(value = "/user")

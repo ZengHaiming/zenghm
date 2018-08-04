@@ -1,5 +1,6 @@
 package com.zenghm.config.center;
 
+import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -221,7 +222,7 @@ public class ConfigManager {
      * 从 Zookeeper 中加载 运用程序配置
      */
     private static void loadApplicationConfigFromZookeeper() {
-
+        //ZooKeeper zookeeper
     }
 
     /**
@@ -230,6 +231,7 @@ public class ConfigManager {
      */
     private static void configInfoUpLoadToZookeeper() {
         if(!SERVER_SIGN.equals(sign)) return;
+        map = loadConfigInfoFromFile();
 
     }
 

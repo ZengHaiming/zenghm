@@ -236,14 +236,15 @@ public class ConfigManager {
         /*
         1、加载配置文件
          */
-        map = loadConfigInfoFromFile();
+        String rootConfigFileName = ROOT_CONFIG+READ_FILE_TYPE;
+        Map<String,Properties> tmpMap = loadConfigInfoFromFile(new String[]{rootConfigFileName});
         /*
         2、查找跟配置文件
          */
-        if (map != null && !map.isEmpty()) {
-            for (String fileName : map.keySet()) {
+        if (tmpMap != null && !tmpMap.isEmpty()) {
+            for (String fileName : tmpMap.keySet()) {
                 if (ROOT_CONFIG.equals(fileName)) {
-                    rootConfig = map.get(fileName);
+                    rootConfig = tmpMap.get(fileName);
                 }
             }
         }
@@ -255,19 +256,12 @@ public class ConfigManager {
          */
         if (rootConfig != null && !rootConfig.isEmpty()) {
             sign = rootConfig.getProperty(SIGN_KEY_NAME);
-            if (!sign.equals(SERVER_SIGN) && !sign.equals(CLIENT_SIGN)) {
+            if (!SERVER_SIGN.equals(sign) && !CLIENT_SIGN.equals(sign)) {
                 logger.warn("Service identity configuration error !");
             }
         }
         if (sign == null || sign.equals("")) {
             logger.warn("No configuration of service identities !");
-        }
-        /*
-        4、非服务器清除其他数据
-         */
-        if (map != null && sign != null && sign.equals(CLIENT_SIGN)) {
-            map.clear();
-            map = null;
         }
     }
 

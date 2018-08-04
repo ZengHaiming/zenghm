@@ -229,6 +229,7 @@ public class ConfigManager {
      * 配置信息上传至 Zookeeper
      */
     private static void configInfoUpLoadToZookeeper() {
+        if(!SERVER_SIGN.equals(sign)) return;
 
     }
 

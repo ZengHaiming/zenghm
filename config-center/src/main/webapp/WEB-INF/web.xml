@@ -10,4 +10,18 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
+    <servlet>
+        <description>资金管理系统初始化一些基础数据</description>
+        <display-name>StartupServlet</display-name>
+        <servlet-name>StartupServlet</servlet-name>
+        <servlet-class>com.fingard.ats.web.front.servlet.StartupServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>StartupServlet</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    
 </web-app>

@@ -50,6 +50,16 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- javax.servlet 依赖 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${javax.servlet.api.version}</version>
+            <!-- 在tomcat 中已经包含此jar ,所以此引用打包时不打入到lib中 -->
+            <scope>provided</scope>
+        </dependency>
+
+
     </dependencies>
 
 </project>

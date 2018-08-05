@@ -445,6 +445,9 @@ public class ConfigManager {
     }
 
 
+    public static void init(){
+        logger.info("Start loading configuration information !");
+    }
     /*public static void main(String[] args) {
         logger.info("Start loading configuration information !");
     }*/

@@ -1,8 +1,12 @@
 package com.zenghm.config.center;
 
-import org.apache.zookeeper.ZooKeeper;
+import org.I0Itec.zkclient.IZkDataListener;
+import org.I0Itec.zkclient.ZkClient;
+import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,12 +20,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2018/07/29
  * Class name:ConfigManager
  */
+
+@SpringBootApplication
 public class ConfigManager {
     private static Logger logger = LoggerFactory.getLogger(ConfigManager.class);
-    /**
-     * 提供服务标识
-     */
-    private static String sign;
+
+    //<editor-fold desc="constant var">
     /**
      * 服务器标识
      */
@@ -40,6 +44,11 @@ public class ConfigManager {
     private static final String PARAM_HIERARCHY = ".";
 
     /**
+     * 节点分层符
+     */
+    private static final String NODE_HIERARCHY="/";
+
+    /**
      * 读取配置文件类型
      */
     private static final String READ_FILE_TYPE = ".properties";
@@ -55,6 +64,19 @@ public class ConfigManager {
      * zookeeper 地址配置键值名称
      */
     private static final String ZOOKEEPER_ADDRESS_KEY_NAME = "zookeeper.address";
+    private static final String ZOOKEEPER_TIMEOUT_KEY_NAME = "zookeeper.timeout";
+    private static final String CURRENT_NODE_KEY_NAME = "applicationName";
+    /**
+     * 配置信息根节点名称
+     */
+    private static final String CONFIG_ROOT_NODE_NAME="ConfigCenterManager";
+    //</editor-fold>
+
+    //<editor-fold desc="控制变量">
+    /**
+     * 提供服务标识
+     */
+    private static String sign;
     /**
      * 存放基本配置信息
      */
@@ -73,10 +95,21 @@ public class ConfigManager {
      */
     private static Map<String, Properties> map;
 
+    /**
+     * 连接zookeeper
+     */
+    private static ZkClient zkClient;
+    //</editor-fold>
+
     static {
         initRootConfig();
+        configInfoUpLoadToZookeeper();
+        loadApplicationConfigFromZookeeper();
+        startMonitor();
     }
 
+
+    //<editor-fold desc="提供外部接口">
     /**
      * 获取参数
      *
@@ -144,6 +177,8 @@ public class ConfigManager {
             equilibriaErrorParams.put(keyName, paramValue);
         }
     }
+    //</editor-fold>
+
 
     /**
      * 均衡
@@ -176,7 +211,8 @@ public class ConfigManager {
      * @return
      */
     private static boolean checkParamIsEquilibriaException(String keyName, String paramValue) {
-        if(equilibriaErrorParams==null||equilibriaErrorParams.isEmpty()||!equilibriaErrorParams.containsKey(keyName)) return false;
+        if(equilibriaErrorParams==null||equilibriaErrorParams.isEmpty()
+                ||!equilibriaErrorParams.containsKey(keyName)) return false;
         String errorParamValue  = equilibriaErrorParams.get(keyName);
         return errorParamValue.contains(paramValue);
     }
@@ -214,6 +250,31 @@ public class ConfigManager {
      * 开启zookeeper 监听
      */
     private static void startMonitor() {
+        if(rootConfig==null||rootConfig.isEmpty()||!CLIENT_SIGN.equals(sign)) return;
+        createZkClientObj();
+        if(null==zkClient) return;
+        String currentClientNode = NODE_HIERARCHY+CONFIG_ROOT_NODE_NAME+rootConfig.get(CURRENT_NODE_KEY_NAME);
+        zkClient.subscribeDataChanges(currentClientNode,new IZkDataListener(){
+            @Override
+            public void handleDataChange(String s, Object o) throws Exception {
+                if(o instanceof Properties){
+                    Properties changedConfig = (Properties) o ;
+                    if(applicationConfig!=null){
+                        applicationConfig.clear();
+                    }else {
+                        applicationConfig = new ConcurrentHashMap<>();
+                    }
+                    for (Object keyName:changedConfig.keySet()){
+                        applicationConfig.put(keyName.toString(),changedConfig.getProperty(keyName.toString()));
+                    }
+                }
+            }
+            @Override
+            public void handleDataDeleted(String s) throws Exception {
+                // not to do
+            }
+        });
+
 
     }
 
@@ -222,18 +283,78 @@ public class ConfigManager {
      * 从 Zookeeper 中加载 运用程序配置
      */
     private static void loadApplicationConfigFromZookeeper() {
-        //ZooKeeper zookeeper
+        if(rootConfig==null||rootConfig.isEmpty()||!CLIENT_SIGN.equals(sign)) return;
+        createZkClientObj();
+        if(null==zkClient) return;
+        String currentClientNode = NODE_HIERARCHY+CONFIG_ROOT_NODE_NAME+rootConfig.get(CURRENT_NODE_KEY_NAME);
+        Properties readConfig = null;
+        try {
+            if(zkClient.exists(currentClientNode)){
+                readConfig = zkClient.readData(currentClientNode);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+        }
+        if(readConfig==null||readConfig.isEmpty()) return;
+        if(applicationConfig!=null){
+            applicationConfig.clear();
+        }else {
+            applicationConfig = new ConcurrentHashMap<>();
+        }
+        for (Object keyName:readConfig.keySet()){
+            applicationConfig.put(keyName.toString(),readConfig.getProperty(keyName.toString()));
+        }
+        logger.info("Read the node configuration information to complete  ! ");
     }
+
+
 
     /**
      * 如果是服务器
      * 配置信息上传至 Zookeeper
      */
     private static void configInfoUpLoadToZookeeper() {
-        if(!SERVER_SIGN.equals(sign)) return;
+        if(rootConfig==null||rootConfig.isEmpty()||!SERVER_SIGN.equals(sign)) return;
         map = loadConfigInfoFromFile();
-
+        if(map==null||map.isEmpty()){
+            logger.warn("No configuration file information exists !");
+            return;
+        }
+        createZkClientObj();
+        if(null==zkClient) return;
+        String rootNode = NODE_HIERARCHY+CONFIG_ROOT_NODE_NAME;
+        for (String configFileName:map.keySet()){
+            String nodeName = rootNode+NODE_HIERARCHY+configFileName;
+            try {
+                if(!zkClient.exists(nodeName)){
+                    zkClient.create(nodeName,map.get(configFileName), CreateMode.PERSISTENT);
+                }else {
+                    zkClient.writeData(nodeName,map.get(configFileName));
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage(),e);
+            }
+        }
     }
+
+    /**
+     * 创建 ZkClient 对象
+     */
+    private static void createZkClientObj(){
+        if(zkClient==null){
+            synchronized (ConfigManager.class){
+                if(zkClient==null){
+                    try {
+                        Integer timeout = Integer.valueOf(rootConfig.getProperty(ZOOKEEPER_TIMEOUT_KEY_NAME));
+                        zkClient = new ZkClient(rootConfig.getProperty(ZOOKEEPER_ADDRESS_KEY_NAME),timeout);
+                    } catch (Exception e) {
+                        logger.error(e.getMessage(),e);
+                    }
+                }
+            }
+        }
+    }
+
 
     private static void initRootConfig() {
         /*
@@ -324,8 +445,7 @@ public class ConfigManager {
     }
 
     public static void main(String[] args) {
-        getClassPathAllFile();
+        SpringApplication.run(ConfigManager.class,args);
     }
-
 
 }

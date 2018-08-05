@@ -1,6 +1,6 @@
 package com.zenghm.config.center;
 
-import org.junit.Test;
+//import org.junit.Test;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -8,11 +8,10 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertArrayEquals;
+//import static org.junit.Assert.assertEquals;
 
 /**
  * @author Airlen
@@ -100,8 +99,7 @@ public class SafeUtil {
 
     }
 
-    @Test
-    public void test() throws Exception {
+    /*public void test() throws Exception {
         String inputStr = "简单加密";
         System.err.println("原文:\n" + inputStr);
 
@@ -139,7 +137,7 @@ public class SafeUtil {
 
         BigInteger mac = new BigInteger(encryptHMAC(inputData, inputStr));
         System.err.println("HMAC:\n" + mac.toString(16));
-    }
+    }*/
 
 
 }

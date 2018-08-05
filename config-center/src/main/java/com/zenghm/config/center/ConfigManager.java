@@ -5,9 +5,6 @@ import org.I0Itec.zkclient.ZkClient;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Class name:ConfigManager
  */
 
-@SpringBootApplication
+
 public class ConfigManager {
     private static Logger logger = LoggerFactory.getLogger(ConfigManager.class);
 
@@ -327,6 +324,9 @@ public class ConfigManager {
             String nodeName = rootNode+NODE_HIERARCHY+configFileName;
             try {
                 if(!zkClient.exists(nodeName)){
+                    if(!zkClient.exists(rootNode)){
+                        zkClient.create(rootNode,System.currentTimeMillis(),CreateMode.PERSISTENT);
+                    }
                     zkClient.create(nodeName,map.get(configFileName), CreateMode.PERSISTENT);
                 }else {
                     zkClient.writeData(nodeName,map.get(configFileName));
@@ -444,8 +444,9 @@ public class ConfigManager {
         return rootFile.list();
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(ConfigManager.class,args);
-    }
+
+    /*public static void main(String[] args) {
+        logger.info("Start loading configuration information !");
+    }*/
 
 }

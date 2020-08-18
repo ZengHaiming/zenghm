@@ -15,7 +15,7 @@
         <description>资金管理系统初始化一些基础数据</description>
         <display-name>StartupServlet</display-name>
         <servlet-name>StartupServlet</servlet-name>
-        <servlet-class>com.fingard.ats.web.front.servlet.StartupServlet</servlet-class>
+        <servlet-class>com.zenghm.config.center.StartupServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     

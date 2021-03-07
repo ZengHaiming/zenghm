@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * @author Airlen
  * @date 2021/3/7
- * @description xxx
+ * @description 十进制数字转换成任意进制数据
  */
 public class BaseConvert {
     public String convert(int num, int base) {

@@ -8,18 +8,18 @@ import java.util.ArrayList;
  * @description xxx
  */
 public class BaseConvert {
-    public String convert(int num,int base){
+    public String convert(int num, int base) {
         ArrayList<Integer> baseNumber = new ArrayList<>();
-        while (true){
-            baseNumber.add(num%base);
-            num = num/base;
-            if(num==1){
+        while (true) {
+            baseNumber.add(num % base);
+            num = num / base;
+            if (num < base) {
                 break;
             }
         }
-        baseNumber.add(1);
+        baseNumber.add(num);
         StringBuilder result = new StringBuilder(baseNumber.size());
-        for (int index = baseNumber.size()-1;index>=0;index--){
+        for (int index = baseNumber.size() - 1; index >= 0; index--) {
             result.append(baseNumber.get(index));
         }
         return result.toString();
@@ -27,6 +27,6 @@ public class BaseConvert {
 
     public static void main(String[] args) {
         BaseConvert baseConvert = new BaseConvert();
-        System.out.println(baseConvert.convert(22,2));
+        System.out.println(baseConvert.convert(23, 16));
     }
 }

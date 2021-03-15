@@ -45,6 +45,6 @@ public class BaseConvert {
 
     public static void main(String[] args) {
         BaseConvert baseConvert = new BaseConvert();
-        System.out.println(baseConvert.convert(baseConvert.convert(19, 19), 19));
+        System.out.println(baseConvert.convert("11111111111", 2));
     }
 }

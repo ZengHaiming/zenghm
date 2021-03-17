@@ -51,8 +51,8 @@ public class FindChar {
                     fisrtMap.remove(character);
                 } else {
                     fisrtMap.put(character,
-                            fisrtMap.get(character) > arrayList.get(index).get(index)
-                                    ? arrayList.get(index).get(index) : fisrtMap.get(character));
+                            fisrtMap.get(character) > arrayList.get(index).get(character)
+                                    ? arrayList.get(index).get(character) : fisrtMap.get(character));
                 }
             }
         }

@@ -77,6 +77,6 @@ public class FindChar {
 
     public static void main(String[] args) {
         FindChar findChar = new FindChar();
-        System.out.println(findChar.find(new String[]{"",""}));
+        System.out.println(findChar.find(new String[]{"dada","aa"}));
     }
 }

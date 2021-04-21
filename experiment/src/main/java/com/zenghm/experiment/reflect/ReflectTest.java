@@ -58,6 +58,16 @@ public class ReflectTest {
             Class<?>[] ParameterTypes = method.getParameterTypes();
             for (Class c:ParameterTypes){
                 System.out.println("Parameterized --- : " + c.getName());
+                if(c.isPrimitive()){
+                    System.out.println("基础数据类型");
+                }else if(c.isArray()){
+                    System.out.println("数据类型");
+                }else if(c.isEnum()){
+                    System.out.println("枚举类型");
+                }else if(c.isInterface()){
+                    System.out.println("接口类型");
+                }
+
             }
         }
     }

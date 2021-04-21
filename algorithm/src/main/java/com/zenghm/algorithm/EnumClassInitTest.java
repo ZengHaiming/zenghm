@@ -30,5 +30,7 @@ public enum  EnumClassInitTest {
     public static void main(String[] args) {
         System.out.println(EnumClassInitTest.class);
         Arrays.stream(EnumClassInitTest.values()).forEach(System.out::println);
+        EnumClassInitTest a = EnumClassInitTest.valueOf("A");
+        System.out.println(a);
     }
 }
